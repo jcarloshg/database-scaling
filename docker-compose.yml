@@ -34,7 +34,6 @@ services:
       POSTGRES_URL: post_db_us_east
     depends_on:
       - post_db_us_east
-      # - broker
 
 volumes:
   post_db_us_east:
