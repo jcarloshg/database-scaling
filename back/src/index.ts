@@ -1,9 +1,9 @@
-
 import express from 'express';
 import cors from 'cors';
 import { syncDatabase } from './application/shared/database';
 import { enablePgcryptoExtension } from './application/shared/database/enable-pgcrypto';
 import { StaticEnvs } from './application/shared/config/envs';
+import { AuthRoute } from './presentation/routes/auth/auth.route';
 
 
 // Initialize StaticEnvs 
@@ -20,6 +20,8 @@ app.use(cors());
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
+
+AuthRoute(app);
 
 const port = StaticEnvs.getInstance().getEnvs().PORT || 3000;
 if (require.main === module) {
