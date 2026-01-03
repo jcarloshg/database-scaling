@@ -1,16 +1,11 @@
 import { IUserRepository } from './models/db/user.repository';
 import { IPasswordHasher } from './models/services/IPasswordHasher';
-import { SignUpRequest, SignUpRequestSchema } from './models/SignUpInput.model';
+import { RegisteredUserToReturn, SignUpRequest, SignUpRequestSchema } from './models/SignUpInput.model';
 
 export interface SignUpResponse {
     code: number;
     message: string;
-    data: {
-        id: string;
-        username: string;
-        email: string;
-        created_at: Date;
-    } | null;
+    data: RegisteredUserToReturn | null;
 }
 
 export class SignUpUseCase {
@@ -20,13 +15,21 @@ export class SignUpUseCase {
     ) { }
 
     async execute(request: SignUpRequest): Promise<SignUpResponse> {
+
+        return {
+            code: 400,
+            message: 'Not implemented',
+            data: null,
+        }
+
         // Validate input
         const parsed = SignUpRequestSchema.safeParse(request);
+        console.log(`parsed: `, parsed);
         if (!parsed.success) {
             return {
                 code: 400,
                 message: 'Invalid sign up data',
-                data: null,
+                data: parsed as any,
             };
         }
 

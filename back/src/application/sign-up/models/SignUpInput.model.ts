@@ -7,3 +7,5 @@ export const SignUpRequestSchema = z.object({
 });
 
 export type SignUpRequest = z.infer<typeof SignUpRequestSchema>;
+
+export type RegisteredUserToReturn = Omit<SignUpRequest, 'password'> & { created_at: Date; id: string };

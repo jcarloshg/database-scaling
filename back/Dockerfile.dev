@@ -8,7 +8,7 @@ ENV NODE_ENV=development
 RUN addgroup -S appgroup && adduser -S user_back -G appgroup
 
 # Set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy only package files first for better cache usage
 COPY --chown=user_back:appgroup package.json package-lock.json* ./
@@ -23,7 +23,7 @@ COPY --chown=user_back:appgroup . .
 
 # Ensure node_modules is owned by user_back for hot reload
 USER root
-RUN chown -R user_back:appgroup /usr/src/app/node_modules
+RUN chown -R user_back:appgroup /app/node_modules
 USER user_back
 
 # Expose the port (default Express port, adjust if needed)

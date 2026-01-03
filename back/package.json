@@ -8,13 +8,13 @@
   },
   "scripts": {
     "start": "ts-node src/index.ts",
-    "start:dev": "nodemon src/index.ts",
+    "start:dev": "nodemon --watch src --ext ts src/index.ts",
+    "dev": "node --watch src/index.ts",
     "jest": "jest --watchAll"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.2.1",

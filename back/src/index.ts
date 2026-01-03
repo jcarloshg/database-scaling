@@ -7,14 +7,11 @@ import { AuthRoute } from './presentation/routes/auth/auth.route';
 
 
 // Initialize StaticEnvs 
-try {
-  const staticEnvs: StaticEnvs = StaticEnvs.getInstance();
-  console.log('Loaded environment variables:', JSON.stringify(staticEnvs.getEnvs(), null, 2));
-} catch (error) {
-  console.error('Error loading environment variables:', error);
-}
+StaticEnvs.getInstance();
 
 const app = express();
+
+app.use(express.json());
 app.use(cors());
 
 app.get('/health', (_req, res) => {

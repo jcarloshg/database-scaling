@@ -25,6 +25,7 @@ services:
       - 3000:3000
     volumes:
       - ./back/src:/app/src
+      - ./back/tests:/app/tests
     environment:
       PORT: 3000
       POSTGRES_DB: post_db
@@ -36,5 +37,7 @@ services:
       - post_db_us_east
 
 volumes:
+  back_volumen:
+    driver: local
   post_db_us_east:
     driver: local
