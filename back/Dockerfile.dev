@@ -1,0 +1,34 @@
+# Development Dockerfile for Node.js + TypeScript
+FROM node:20.19.4-alpine3.22
+
+# Set environment variables early
+ENV NODE_ENV=development
+
+# Create app group/user
+RUN addgroup -S appgroup && adduser -S user_back -G appgroup
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Copy only package files first for better cache usage
+COPY --chown=user_back:appgroup package.json package-lock.json* ./
+
+# Install dependencies as root (npm needs to write to node_modules)
+USER root
+RUN npm install
+
+# Copy the rest of the source code as user_back
+USER user_back
+COPY --chown=user_back:appgroup . .
+
+# Ensure node_modules is owned by user_back for hot reload
+USER root
+RUN chown -R user_back:appgroup /usr/src/app/node_modules
+USER user_back
+
+# Expose the port (default Express port, adjust if needed)
+EXPOSE 3000
+
+
+# Start the app in development mode with hot reload
+CMD ["npm", "run", "start:dev"]

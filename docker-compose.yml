@@ -16,24 +16,25 @@ services:
     volumes:
       - post_db_us_east:/var/lib/postgresql/data
 
-  # back:
-  #   build: ./back
-  #   container_name: back
-  #   ports:
-  #     - 8000:8000
-  #   volumes:
-  #     - ./back/src:/app/src
-  #   environment:
-  #     PORT: 8000
-  #     POSTGRES_DB: db_for_commands
-  #     POSTGRES_URL: post_db_us_east
-  #     POSTGRES_PORT: 5432
-  #     POSTGRES_USER: admin
-  #     POSTGRES_PASSWORD: 123456
-  #     brokers: "broker:29092"
-  #   depends_on:
-  #     - post_db_us_east
-  #     - broker
+  back:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.dev
+    container_name: back
+    ports:
+      - 3000:3000
+    volumes:
+      - ./back/src:/app/src
+    environment:
+      PORT: 3000
+      POSTGRES_DB: post_db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_URL: post_db_us_east
+    depends_on:
+      - post_db_us_east
+      # - broker
 
 volumes:
   post_db_us_east:
