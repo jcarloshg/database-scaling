@@ -1,13 +1,27 @@
 import { z } from 'zod';
 // Interface describing the environment variables structure
 export interface IEnvs {
+	// for node
 	NODE_ENV: string;
 	PORT: string;
-	POSTGRES_DB: string;
-	POSTGRES_PORT: string;
-	POSTGRES_USER: string;
-	POSTGRES_PASSWORD: string;
-	POSTGRES_URL: string;
+	// for dbs
+	POSTGRES_USER_east: string,
+	POSTGRES_PASSWORD_east: string,
+	POSTGRES_DB_east: string,
+	POSTGRES_PORT_east: string,
+	POSTGRES_USER_west: string,
+	POSTGRES_PASSWORD_west: string,
+	POSTGRES_DB_west: string,
+	POSTGRES_PORT_west: string,
+	POSTGRES_USER_europe: string,
+	POSTGRES_PASSWORD_europe: string,
+	POSTGRES_DB_europe: string,
+	POSTGRES_PORT_europe: string,
+	POSTGRES_USER_asia: string,
+	POSTGRES_PASSWORD_asia: string,
+	POSTGRES_DB_asia: string,
+	POSTGRES_PORT_asia: string,
+
 	[key: string]: string | undefined;
 }
 
@@ -18,13 +32,26 @@ export class StaticEnvs {
 
 	// Zod schema for environment validation
 	private static envSchema = z.object({
+		// for node
 		NODE_ENV: z.string().default('development'),
 		PORT: z.string().default('3000'),
-		POSTGRES_DB: z.string().default('post_db'),
-		POSTGRES_PORT: z.string().default('5432'),
-		POSTGRES_USER: z.string().default('admin'),
-		POSTGRES_PASSWORD: z.string().default('123456'),
-		POSTGRES_URL: z.string().default('post_db_us_east'),
+		// for dbs
+		POSTGRES_USER_east: z.string(),
+		POSTGRES_PASSWORD_east: z.string(),
+		POSTGRES_DB_east: z.string(),
+		POSTGRES_PORT_east: z.string(),
+		POSTGRES_USER_west: z.string(),
+		POSTGRES_PASSWORD_west: z.string(),
+		POSTGRES_DB_west: z.string(),
+		POSTGRES_PORT_west: z.string(),
+		POSTGRES_USER_europe: z.string(),
+		POSTGRES_PASSWORD_europe: z.string(),
+		POSTGRES_DB_europe: z.string(),
+		POSTGRES_PORT_europe: z.string(),
+		POSTGRES_USER_asia: z.string(),
+		POSTGRES_PASSWORD_asia: z.string(),
+		POSTGRES_DB_asia: z.string(),
+		POSTGRES_PORT_asia: z.string(),
 	});
 
 	private constructor() {
