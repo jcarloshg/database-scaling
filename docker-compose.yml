@@ -1,9 +1,4 @@
 services:
-  # US-East
-  # US-West
-  # EU
-  # Asia
-
   post_db_us_east:
     container_name: post_db_us_east
     build: ./database
@@ -16,6 +11,42 @@ services:
     volumes:
       - post_db_us_east:/var/lib/postgresql/data
 
+  post_db_us_west:
+    container_name: post_db_us_west
+    build: ./database
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=post_db
+    volumes:
+      - post_db_us_west:/var/lib/postgresql/data
+
+  post_db_europe:
+    container_name: post_db_europe
+    build: ./database
+    ports:
+      - 5440:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=post_db
+    volumes:
+      - post_db_europe:/var/lib/postgresql/data
+
+  post_db_asia:
+    container_name: post_db_asia
+    build: ./database
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=post_db
+    volumes:
+      - post_db_asia:/var/lib/postgresql/data
+
   back:
     build:
       context: ./back
@@ -25,19 +56,39 @@ services:
       - 3000:3000
     volumes:
       - ./back/src:/app/src
-      - ./back/tests:/app/tests
     environment:
       PORT: 3000
-      POSTGRES_DB: post_db
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_URL: post_db_us_east
+      POSTGRES_USER_east: admin
+      POSTGRES_PASSWORD_east: 123456
+      POSTGRES_DB_east: post_db
+      POSTGRES_PORT_east: 5432
+      POSTGRES_USER_west: admin
+      POSTGRES_PASSWORD_west: 123456
+      POSTGRES_DB_west: post_db
+      POSTGRES_PORT_west: 5433
+      POSTGRES_USER_europe: admin
+      POSTGRES_PASSWORD_europe: 123456
+      POSTGRES_DB_europe: post_db
+      POSTGRES_PORT_europe: 5440
+      POSTGRES_USER_asia: admin
+      POSTGRES_PASSWORD_asia: 123456
+      POSTGRES_DB_asia: post_db
+      POSTGRES_PORT_asia: 5435
+
     depends_on:
       - post_db_us_east
+      - post_db_us_west
+      - post_db_asia
+      - post_db_europe
 
 volumes:
   back_volumen:
     driver: local
   post_db_us_east:
+    driver: local
+  post_db_us_west:
+    driver: local
+  post_db_europe:
+    driver: local
+  post_db_asia:
     driver: local
