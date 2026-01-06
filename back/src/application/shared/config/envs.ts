@@ -72,4 +72,8 @@ export class StaticEnvs {
 	getEnvs(): IEnvs {
 		return this.envs;
 	}
+
+	getByKey(key: string): string | undefined {
+		return this.envs[key];
+	}
 }
