@@ -1,4 +1,4 @@
-import { User } from '../../../shared/database/user.model';
+import { User } from '../../../shared/database/user.model-postgresql';
 import { DataBaseRegion } from '../../../shared/variables/db_regions.type';
 
 // Abstract repository class

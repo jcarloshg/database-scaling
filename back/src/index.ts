@@ -26,8 +26,9 @@ console.log(`port: `, port);
 if (require.main === module) {
   (async () => {
     try {
-      await RegionalDbManager.getInstance();
-      await RegionalDbManager.checkConnections();
+      RegionalDbManager.getInstance();
+      RegionalDbManager.checkConnection("ASIA");
+      // await RegionalDbManager.checkConnections();
       // await enablePgcryptoExtension();
       // await syncDatabase();
       app.listen(port, () => {

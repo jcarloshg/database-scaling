@@ -4,8 +4,11 @@ import { DataBaseRegion, REGIONS } from "../variables/db_regions.type";
 
 export class RegionalDbManager {
 
-    private static instance: RegionalDbManager;
-    private static dbConnections: Map<DataBaseRegion, Sequelize> = new Map();
+    private static _instance: RegionalDbManager;
+    private static _dbConnections: Map<DataBaseRegion, Sequelize> = new Map();
+
+    private static _currentRegion: DataBaseRegion | null = null;
+    private static _currentConnection: Sequelize | null = null;
 
     private constructor() {
         REGIONS.map(
@@ -22,7 +25,7 @@ export class RegionalDbManager {
                         dialect: "postgres",
                         logging: false,
                     });
-                    RegionalDbManager.dbConnections.set(region, sequelize);
+                    RegionalDbManager._dbConnections.set(region, sequelize);
                 } catch (error) {
                     console.error(`Error creating DB connection for region ${region}:`, error);
                 }
@@ -31,16 +34,71 @@ export class RegionalDbManager {
     }
 
     public static getInstance(): RegionalDbManager {
-        if (!RegionalDbManager.instance) {
-            RegionalDbManager.instance = new RegionalDbManager();
+        if (!RegionalDbManager._instance) {
+            RegionalDbManager._instance = new RegionalDbManager();
         }
-        return RegionalDbManager.instance;
+        return RegionalDbManager._instance;
+    }
+
+
+    static setConnectionByRegion(region: DataBaseRegion) {
+        const dbConnection = RegionalDbManager._dbConnections.get(region);
+        if (dbConnection) {
+            RegionalDbManager._currentRegion = region;
+            RegionalDbManager._currentConnection = dbConnection;
+            console.log(`Set DB connection to region: ${region}`);
+        } else {
+            console.error(`No DB connection found for region: ${region}`);
+        }
+    }
+
+    static getCurrentConnection() {
+        return {
+            region: RegionalDbManager._currentRegion,
+            connection: RegionalDbManager._currentConnection,
+        }
+    }
+
+    public static checkConnection = async (region: DataBaseRegion) => {
+        const dbConnection = RegionalDbManager._dbConnections.get(region);
+        if (dbConnection) {
+            try {
+
+                // back             |   database: 'post_db',
+                // back             |   username: 'admin',
+                // back             |   password: '123456',
+                // back             |   host: 'post_db_asia',
+                // back             |   port: 5104,
+
+                // await conn.authenticate();
+                // const conf = dbConnection.config;
+                // console.log(`\nconf: `, conf);
+                // await dbConnection.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto";');
+
+                const sequelize = new Sequelize({
+                    database: 'post_db',
+                    username: 'admin',
+                    password: '123456',
+                    host: 'post_db_asia',
+                    port: 5104,
+                    dialect: "postgres",
+                    logging: false,
+                });
+                // await sequelize.authenticate();
+                await sequelize.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto";');
+
+
+                console.log(`Connection to ${region} has been established successfully.`);
+            } catch (error) {
+                console.error(`Error to connect to the database for region ${region}:`, error);
+            }
+        }
     }
 
     public static checkConnections = async () => {
         await Promise.all(
             REGIONS.map(async (reg) => {
-                const dbConnection = RegionalDbManager.dbConnections.get(reg);
+                const dbConnection = RegionalDbManager._dbConnections.get(reg);
                 if (dbConnection) {
                     try {
                         // await conn.authenticate();
@@ -61,7 +119,7 @@ export class RegionalDbManager {
     // ─────────────────────────────────────
 
     static getDbConnectionByRegion(region: DataBaseRegion): Sequelize | undefined {
-        return RegionalDbManager.dbConnections.get(region);
+        return RegionalDbManager._dbConnections.get(region);
     }
 
     private getKeysByRegion(region: DataBaseRegion): {

@@ -1,7 +1,7 @@
 // user-repository.postgresql
 import { Sequelize } from "sequelize";
 import { RegionalDbManager } from "../../../shared/database/regional-db-manager";
-import { User } from "../../../shared/database/user.model";
+import { User } from "../../../shared/database/user.model-postgresql";
 import { DataBaseRegion } from "../../../shared/variables/db_regions.type";
 import { UserRepository } from "../../models/db/user.repository";
 
