@@ -1,19 +1,16 @@
-import { User } from '../../../shared/database/user.model-postgresql';
+import { UserModelPostgres } from '../../../shared/database/user.model-postgresql';
 import { DataBaseRegion } from '../../../shared/variables/db_regions.type';
 
 // Abstract repository class
 export class UserRepository {
 
-
-    constructor(public dbRegion: DataBaseRegion = "US_EAST") { }
-
-    public createUser(data: { username: string; email: string; password_hash: string; }): Promise<User> {
+    public createUser(data: { username: string; email: string; password_hash: string; }): Promise<UserModelPostgres> {
         throw new Error("Method not implemented.");
     }
-    public findByEmail(email: string): Promise<User | null> {
+    public findByEmail(email: string): Promise<UserModelPostgres | null> {
         throw new Error("Method not implemented.");
     }
-    public findByUsername(username: string): Promise<User | null> {
+    public findByUsername(username: string): Promise<UserModelPostgres | null> {
         throw new Error("Method not implemented.");
     }
 }

@@ -1,8 +1,9 @@
 POST http://localhost:3999/auth/sign-up
 Content-Type: application/json
+x-region: US_EAST
 
 {
-    "username": "testuser02",
-    "email": "test02@email.com",
+    "username": "testuser05",
+    "email": "test05@email.com",
     "password": "securepassword"
 }

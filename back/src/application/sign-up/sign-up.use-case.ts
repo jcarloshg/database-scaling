@@ -16,15 +16,8 @@ export class SignUpUseCase {
 
     async execute(request: SignUpRequest): Promise<SignUpResponse> {
 
-        // return {
-        //     code: 400,
-        //     message: 'Not implemented',
-        //     data: null,
-        // }
-
         // Validate input
         const parsed = SignUpRequestSchema.safeParse(request);
-        console.log(`parsed: `, parsed);
         if (!parsed.success) {
             return {
                 code: 400,

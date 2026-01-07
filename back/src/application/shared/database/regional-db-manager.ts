@@ -14,7 +14,6 @@ export class RegionalDbManager {
         REGIONS.map(
             (region) => {
                 try {
-                    console.log(`creating connection for: `, region);
                     const keys = this.getKeysByRegion(region);
                     const sequelize = new Sequelize({
                         database: keys.postgresDbKey,
@@ -26,6 +25,7 @@ export class RegionalDbManager {
                         logging: false,
                     });
                     RegionalDbManager._dbConnections.set(region, sequelize);
+                    console.log(`DB connection created for region: ${region}`);
                 } catch (error) {
                     console.error(`Error creating DB connection for region ${region}:`, error);
                 }
@@ -63,24 +63,6 @@ export class RegionalDbManager {
         const dbConnection = RegionalDbManager._dbConnections.get(region);
         if (dbConnection) {
             try {
-
-                // back             |   database: 'post_db',
-                // back             |   username: 'admin',
-                // back             |   password: '123456',
-                // back             |   host: 'post_db_asia',
-                // back             |   port: 5104,
-
-                // const sequelize = new Sequelize({
-                //     database: 'post_db',
-                //     username: 'admin',
-                //     password: '123456',
-                //     host: 'post_db_asia',
-                //     port: 5104,
-                //     dialect: "postgres",
-                //     logging: false,
-                // });
-                // // await sequelize.authenticate();
-                // await sequelize.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto";');
 
                 const conf = dbConnection.config;
                 console.log(`\nconf: `, conf);

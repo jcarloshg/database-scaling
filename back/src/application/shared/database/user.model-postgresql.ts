@@ -1,5 +1,5 @@
+// import sequelize from './connection';
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import sequelize from './connection';
 
 
 interface UserAttributes {
@@ -12,7 +12,7 @@ interface UserAttributes {
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'created_at'> { }
 
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+export class UserModelPostgres extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
   public username!: string;
   public email!: string;
@@ -20,7 +20,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public created_at!: Date;
 
   public static setConnection(sequelizeInstance: Sequelize) {
-    User.init(
+    UserModelPostgres.init(
       {
         id: {
           type: DataTypes.UUID,

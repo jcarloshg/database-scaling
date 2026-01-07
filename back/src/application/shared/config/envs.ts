@@ -65,7 +65,6 @@ export class StaticEnvs {
 	private constructor() {
 		try {
 			this.envs = StaticEnvs.envSchema.parse(process.env);
-			console.log(`Environment variables: `, this.envs);
 		} catch (error) {
 			console.error('Error loading environment variables:', error);
 			throw error;

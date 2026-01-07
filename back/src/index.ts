@@ -22,13 +22,14 @@ app.get('/health', (_req, res) => {
 AuthRoute(app);
 
 const port = StaticEnvs.getInstance().getEnvs().PORT;
-console.log(`port: `, port);
 if (require.main === module) {
   (async () => {
     try {
+
       RegionalDbManager.getInstance();
       // await RegionalDbManager.checkConnection("US_EAST");
-      await RegionalDbManager.checkConnections();
+      // await RegionalDbManager.checkConnections();
+
       // await enablePgcryptoExtension();
       // await syncDatabase();
       app.listen(port, () => {

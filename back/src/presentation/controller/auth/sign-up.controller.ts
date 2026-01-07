@@ -13,5 +13,6 @@ export const SignUpController = async (req: Request, res: Response) => {
 
     res.status(result.code).json({
         message: result.message,
+        data: result.data,
     });
 }

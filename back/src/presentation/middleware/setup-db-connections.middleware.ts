@@ -3,7 +3,7 @@
 import { Request, Response } from "express";
 import { RegionalDbManager } from "../../application/shared/database/regional-db-manager";
 import { DataBaseRegion, REGIONS } from "../../application/shared/variables/db_regions.type";
-import { User } from "../../application/shared/database/user.model-postgresql";
+import { UserModelPostgres } from "../../application/shared/database/user.model-postgresql";
 
 export const SetUpDbConnections = async (
     req: Request,
@@ -29,9 +29,9 @@ export const SetUpDbConnections = async (
 
     // set the correct sequelize instance based on the current region
     const currentConnection = RegionalDbManager.getCurrentConnection();
-    User.setConnection(currentConnection.connection!);
+    UserModelPostgres.setConnection(currentConnection.connection!);
 
-    const a = await User.findAll()
+    const a = await UserModelPostgres.findAll()
     console.log(`Users found in ${region} DB: `, a.length);
 
     next();
