@@ -70,23 +70,22 @@ export class RegionalDbManager {
                 // back             |   host: 'post_db_asia',
                 // back             |   port: 5104,
 
-                // await conn.authenticate();
-                // const conf = dbConnection.config;
-                // console.log(`\nconf: `, conf);
-                // await dbConnection.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto";');
+                // const sequelize = new Sequelize({
+                //     database: 'post_db',
+                //     username: 'admin',
+                //     password: '123456',
+                //     host: 'post_db_asia',
+                //     port: 5104,
+                //     dialect: "postgres",
+                //     logging: false,
+                // });
+                // // await sequelize.authenticate();
+                // await sequelize.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto";');
 
-                const sequelize = new Sequelize({
-                    database: 'post_db',
-                    username: 'admin',
-                    password: '123456',
-                    host: 'post_db_asia',
-                    port: 5104,
-                    dialect: "postgres",
-                    logging: false,
-                });
-                // await sequelize.authenticate();
-                await sequelize.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto";');
-
+                const conf = dbConnection.config;
+                console.log(`\nconf: `, conf);
+                await dbConnection.authenticate();
+                await dbConnection.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto";');
 
                 console.log(`Connection to ${region} has been established successfully.`);
             } catch (error) {
