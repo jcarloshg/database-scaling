@@ -1,11 +1,27 @@
 // user-repository.postgresql
-import { User } from '../../../shared/database/user.model';
-import { IUserRepository } from '../../models/db/user.repository';
+import { Sequelize } from "sequelize";
+import { RegionalDbManager } from "../../../shared/database/regional-db-manager";
+import { User } from "../../../shared/database/user.model";
+import { DataBaseRegion } from "../../../shared/variables/db_regions.type";
+import { UserRepository } from "../../models/db/user.repository";
 
+export class UserRepositoryPostgresql implements UserRepository {
 
-export class UserRepositoryPostgresql implements IUserRepository {
-    async createUser(data: { username: string; email: string; password_hash: string; }): Promise<User> {
-        const user = await User.create({
+    private dbConnection: Sequelize;
+
+    constructor(public dbRegion: DataBaseRegion = "US_EAST") {
+        const dbConnection = RegionalDbManager.getDbConnectionByRegion(dbRegion);
+        if (!dbConnection) throw new Error(`No DB connection found for region: ${dbRegion}`);
+        this.dbConnection = dbConnection;
+    }
+
+    async createUser(data: {
+        username: string;
+        email: string;
+        password_hash: string;
+    }): Promise<User> {
+        const UserSchema = User.getByRegion(this.dbConnection);
+        const user = await UserSchema.create({
             username: data.username,
             email: data.email,
             password_hash: data.password_hash,
@@ -14,12 +30,14 @@ export class UserRepositoryPostgresql implements IUserRepository {
     }
 
     async findByEmail(email: string): Promise<User | null> {
-        const user = await User.findOne({ where: { email } });
-        return user ? (user.toJSON() as User) : null;
+        return null;
+        // const user = await User.findOne({ where: { email } });
+        // return user ? (user.toJSON() as User) : null;
     }
 
     async findByUsername(username: string): Promise<User | null> {
-        const user = await User.findOne({ where: { username } });
-        return user ? (user.toJSON() as User) : null;
+        return null;
+        // const user = await User.findOne({ where: { username } });
+        // return user ? (user.toJSON() as User) : null;
     }
 }

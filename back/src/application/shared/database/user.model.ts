@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import sequelize from './connection';
 
 interface UserAttributes {
@@ -9,7 +9,7 @@ interface UserAttributes {
   created_at?: Date;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'created_at'> {}
+interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'created_at'> { }
 
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
@@ -17,49 +17,101 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public email!: string;
   public password_hash!: string;
   public created_at!: Date;
+
+  static getByRegion(dbConnection: Sequelize): typeof User {
+
+    User.init(
+      {
+        id: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+        },
+        username: {
+          type: DataTypes.STRING(50),
+          allowNull: false,
+          unique: true,
+          validate: {
+            len: [3, 50],
+          },
+        },
+        email: {
+          type: DataTypes.STRING(255),
+          allowNull: false,
+          unique: true,
+          validate: {
+            isEmail: true,
+          },
+        },
+        password_hash: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+        },
+        created_at: {
+          type: DataTypes.DATE,
+          defaultValue: DataTypes.NOW,
+        },
+      },
+      {
+        sequelize: dbConnection,
+        tableName: 'users',
+        timestamps: false,
+        indexes: [
+          {
+            unique: true,
+            fields: ['username'],
+          },
+        ],
+      }
+    );
+
+    return User;
+
+  }
+
 }
 
-User.init(
-  {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
-    username: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      unique: true,
-      validate: {
-        len: [3, 50],
-      },
-    },
-    email: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
-    },
-    password_hash: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-  },
-  {
-    sequelize,
-    tableName: 'users',
-    timestamps: false,
-    indexes: [
-      {
-        unique: true,
-        fields: ['username'],
-      },
-    ],
-  }
-);
+// User.init(
+//   {
+//     id: {
+//       type: DataTypes.UUID,
+//       defaultValue: DataTypes.UUIDV4,
+//       primaryKey: true,
+//     },
+//     username: {
+//       type: DataTypes.STRING(50),
+//       allowNull: false,
+//       unique: true,
+//       validate: {
+//         len: [3, 50],
+//       },
+//     },
+//     email: {
+//       type: DataTypes.STRING(255),
+//       allowNull: false,
+//       unique: true,
+//       validate: {
+//         isEmail: true,
+//       },
+//     },
+//     password_hash: {
+//       type: DataTypes.TEXT,
+//       allowNull: false,
+//     },
+//     created_at: {
+//       type: DataTypes.DATE,
+//       defaultValue: DataTypes.NOW,
+//     },
+//   },
+//   {
+//     sequelize,
+//     tableName: 'users',
+//     timestamps: false,
+//     indexes: [
+//       {
+//         unique: true,
+//         fields: ['username'],
+//       },
+//     ],
+//   }
+// );

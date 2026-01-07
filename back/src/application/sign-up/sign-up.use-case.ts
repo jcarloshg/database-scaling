@@ -1,4 +1,4 @@
-import { IUserRepository } from './models/db/user.repository';
+import { UserRepository } from './models/db/user.repository';
 import { IPasswordHasher } from './models/services/IPasswordHasher';
 import { RegisteredUserToReturn, SignUpRequest, SignUpRequestSchema } from './models/SignUpInput.model';
 
@@ -10,17 +10,17 @@ export interface SignUpResponse {
 
 export class SignUpUseCase {
     constructor(
-        private readonly userRepository: IUserRepository,
+        private readonly userRepository: UserRepository,
         private readonly passwordHasher: IPasswordHasher
     ) { }
 
     async execute(request: SignUpRequest): Promise<SignUpResponse> {
 
-        return {
-            code: 400,
-            message: 'Not implemented',
-            data: null,
-        }
+        // return {
+        //     code: 400,
+        //     message: 'Not implemented',
+        //     data: null,
+        // }
 
         // Validate input
         const parsed = SignUpRequestSchema.safeParse(request);

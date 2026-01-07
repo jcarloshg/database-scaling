@@ -4,6 +4,7 @@ import { syncDatabase } from './application/shared/database';
 import { enablePgcryptoExtension } from './application/shared/database/enable-pgcrypto';
 import { StaticEnvs } from './application/shared/config/envs';
 import { AuthRoute } from './presentation/routes/auth/auth.route';
+import { RegionalDbManager } from './application/shared/database/regional-db-manager';
 
 
 // Initialize StaticEnvs 
@@ -24,6 +25,7 @@ const port = StaticEnvs.getInstance().getEnvs().PORT || 3000;
 if (require.main === module) {
   (async () => {
     try {
+      await RegionalDbManager.getInstance();
       await enablePgcryptoExtension();
       await syncDatabase();
       app.listen(port, () => {
