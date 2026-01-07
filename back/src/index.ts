@@ -21,7 +21,8 @@ app.get('/health', (_req, res) => {
 
 AuthRoute(app);
 
-const port = StaticEnvs.getInstance().getEnvs().PORT || 3000;
+const port = StaticEnvs.getInstance().getEnvs().PORT;
+console.log(`port: `, port);
 if (require.main === module) {
   (async () => {
     try {

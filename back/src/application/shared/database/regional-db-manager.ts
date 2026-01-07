@@ -8,22 +8,26 @@ export class RegionalDbManager {
     private static dbConnections: Map<DataBaseRegion, Sequelize> = new Map();
 
     private constructor() {
-        REGIONS.map(async (region) => {
-            try {
-                console.log(`creating connection for: `, region);
-                const keys = this.getKeysByRegion(region);
-                const sequelize = new Sequelize({
-                    database: keys.postgresDbKey,
-                    username: keys.postgresUserKey,
-                    password: keys.postgresPasswordKey,
-                    host: keys.postgresHostKey,
-                    port: Number(keys.postgresPortKey),
-                    dialect: "postgres",
-                    logging: false,
-                });
-                RegionalDbManager.dbConnections.set(region, sequelize);
-            } catch (error) { }
-        });
+        REGIONS.map(
+            (region) => {
+                try {
+                    console.log(`creating connection for: `, region);
+                    const keys = this.getKeysByRegion(region);
+                    const sequelize = new Sequelize({
+                        database: keys.postgresDbKey,
+                        username: keys.postgresUserKey,
+                        password: keys.postgresPasswordKey,
+                        host: keys.postgresHostKey,
+                        port: Number(keys.postgresPortKey),
+                        dialect: "postgres",
+                        logging: false,
+                    });
+                    RegionalDbManager.dbConnections.set(region, sequelize);
+                } catch (error) {
+                    console.error(`Error creating DB connection for region ${region}:`, error);
+                }
+            }
+        );
     }
 
     public static getInstance(): RegionalDbManager {
@@ -36,13 +40,16 @@ export class RegionalDbManager {
     public static checkConnections = async () => {
         await Promise.all(
             REGIONS.map(async (reg) => {
-                const conn = RegionalDbManager.dbConnections.get(reg);
-                if (conn) {
+                const dbConnection = RegionalDbManager.dbConnections.get(reg);
+                if (dbConnection) {
                     try {
-                        await conn.authenticate();
+                        // await conn.authenticate();
+                        const conf = dbConnection.config;
+                        console.log(`Testing connection to ${reg} at ${conf.host}:${conf.port}/${conf.database} as ${conf.username}`);
+                        await dbConnection.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto";');
                         console.log(`Connection to ${reg} has been established successfully.`);
                     } catch (error) {
-                        console.error(`Unable to connect to the database for region ${reg}:`, error);
+                        console.error(`Error to connect to the database for region ${reg}:`, error);
                     }
                 }
             })

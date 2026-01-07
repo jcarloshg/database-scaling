@@ -53,7 +53,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: back
     ports:
-      - 3000:3000
+      - 3999:3000
     volumes:
       - ./back/src:/app/src
     environment:
