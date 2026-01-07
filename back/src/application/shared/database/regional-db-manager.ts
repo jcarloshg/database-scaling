@@ -16,7 +16,7 @@ export class RegionalDbManager {
                     database: keys.postgresDbKey,
                     username: keys.postgresUserKey,
                     password: keys.postgresPasswordKey,
-                    // host: envs.POSTGRES_URL || 'post_db_us_east',
+                    host: keys.postgresHostKey,
                     port: Number(keys.postgresPortKey),
                     dialect: "postgres",
                     logging: false,
@@ -33,6 +33,22 @@ export class RegionalDbManager {
         return RegionalDbManager.instance;
     }
 
+    public static checkConnections = async () => {
+        await Promise.all(
+            REGIONS.map(async (reg) => {
+                const conn = RegionalDbManager.dbConnections.get(reg);
+                if (conn) {
+                    try {
+                        await conn.authenticate();
+                        console.log(`Connection to ${reg} has been established successfully.`);
+                    } catch (error) {
+                        console.error(`Unable to connect to the database for region ${reg}:`, error);
+                    }
+                }
+            })
+        )
+    }
+
     // ─────────────────────────────────────
     // aux methods
     // ─────────────────────────────────────
@@ -46,6 +62,7 @@ export class RegionalDbManager {
         postgresPasswordKey: string | undefined;
         postgresDbKey: string | undefined;
         postgresPortKey: string | undefined;
+        postgresHostKey: string | undefined;
     } {
         const getRegion = (region: DataBaseRegion): string => {
             switch (region) {
@@ -62,22 +79,18 @@ export class RegionalDbManager {
 
         const regionSuffix = getRegion(region);
         const staticEnvs = StaticEnvs.getInstance();
-        const postgresUserKey = staticEnvs.getByKey(
-            `POSTGRES_USER_${regionSuffix}`
-        );
-        const postgresPasswordKey = staticEnvs.getByKey(
-            `POSTGRES_PASSWORD_${regionSuffix}`
-        );
+        const postgresUserKey = staticEnvs.getByKey(`POSTGRES_USER_${regionSuffix}`);
+        const postgresPasswordKey = staticEnvs.getByKey(`POSTGRES_PASSWORD_${regionSuffix}`);
         const postgresDbKey = staticEnvs.getByKey(`POSTGRES_DB_${regionSuffix}`);
-        const postgresPortKey = staticEnvs.getByKey(
-            `POSTGRES_PORT_${regionSuffix}`
-        );
+        const postgresPortKey = staticEnvs.getByKey(`POSTGRES_PORT_${regionSuffix}`);
+        const postgresHostKey = staticEnvs.getByKey(`POSTGRES_HOST_${regionSuffix}`);
 
         return {
             postgresUserKey,
             postgresPasswordKey,
             postgresDbKey,
             postgresPortKey,
+            postgresHostKey,
         };
     }
 }

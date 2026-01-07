@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import { syncDatabase } from './application/shared/database';
-import { enablePgcryptoExtension } from './application/shared/database/enable-pgcrypto';
+// import { syncDatabase } from './application/shared/database';
+// import { enablePgcryptoExtension } from './application/shared/database/enable-pgcrypto';
 import { StaticEnvs } from './application/shared/config/envs';
 import { AuthRoute } from './presentation/routes/auth/auth.route';
 import { RegionalDbManager } from './application/shared/database/regional-db-manager';
@@ -26,8 +26,9 @@ if (require.main === module) {
   (async () => {
     try {
       await RegionalDbManager.getInstance();
-      await enablePgcryptoExtension();
-      await syncDatabase();
+      await RegionalDbManager.checkConnections();
+      // await enablePgcryptoExtension();
+      // await syncDatabase();
       app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
       });

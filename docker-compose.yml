@@ -3,7 +3,7 @@ services:
     container_name: post_db_us_east
     build: ./database
     ports:
-      - 5432:5432
+      - 5101:5432
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=123456
@@ -15,7 +15,7 @@ services:
     container_name: post_db_us_west
     build: ./database
     ports:
-      - 5433:5432
+      - 5102:5432
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=123456
@@ -27,7 +27,7 @@ services:
     container_name: post_db_europe
     build: ./database
     ports:
-      - 5440:5432
+      - 5103:5432
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=123456
@@ -39,7 +39,7 @@ services:
     container_name: post_db_asia
     build: ./database
     ports:
-      - 5435:5432
+      - 5104:5432
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=123456
@@ -61,25 +61,32 @@ services:
       POSTGRES_USER_east: admin
       POSTGRES_PASSWORD_east: 123456
       POSTGRES_DB_east: post_db
-      POSTGRES_PORT_east: 5432
+      POSTGRES_PORT_east: 5101
+      POSTGRES_HOST_east: post_db_us_east
+
       POSTGRES_USER_west: admin
       POSTGRES_PASSWORD_west: 123456
       POSTGRES_DB_west: post_db
-      POSTGRES_PORT_west: 5433
+      POSTGRES_PORT_west: 5102
+      POSTGRES_HOST_west: post_db_us_west
+
       POSTGRES_USER_europe: admin
       POSTGRES_PASSWORD_europe: 123456
       POSTGRES_DB_europe: post_db
-      POSTGRES_PORT_europe: 5440
+      POSTGRES_PORT_europe: 5103
+      POSTGRES_HOST_europe: post_db_europe
+
       POSTGRES_USER_asia: admin
       POSTGRES_PASSWORD_asia: 123456
       POSTGRES_DB_asia: post_db
-      POSTGRES_PORT_asia: 5435
+      POSTGRES_PORT_asia: 5104
+      POSTGRES_HOST_asia: post_db_asia
 
     depends_on:
       - post_db_us_east
       - post_db_us_west
-      - post_db_asia
       - post_db_europe
+      - post_db_asia
 
 volumes:
   back_volumen:

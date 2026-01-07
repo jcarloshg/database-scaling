@@ -20,8 +20,8 @@ export class UserRepositoryPostgresql implements UserRepository {
         email: string;
         password_hash: string;
     }): Promise<User> {
-        const UserSchema = User.getByRegion(this.dbConnection);
-        const user = await UserSchema.create({
+        // const UserSchema = User.setRegionSequelize(this.dbConnection);
+        const user = await User.create({
             username: data.username,
             email: data.email,
             password_hash: data.password_hash,
