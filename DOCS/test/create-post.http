@@ -1,0 +1,9 @@
+POST http://localhost:3999/posts
+Content-Type: application/json
+x-region: US_WEST
+x-user-uuid: 123e4567-e89b-12d3-a456-426614174000
+x-user-name: testuser02
+
+{
+  "content": "Hello, this is my first post!"
+}

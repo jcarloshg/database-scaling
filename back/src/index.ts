@@ -4,8 +4,8 @@ import cors from 'cors';
 // import { enablePgcryptoExtension } from './application/shared/database/enable-pgcrypto';
 import { StaticEnvs } from './application/shared/config/envs';
 import { AuthRoute } from './presentation/routes/auth/auth.route';
+import { PostRoute } from './presentation/routes/create-post.route';
 import { RegionalDbManager } from './application/shared/database/regional-db-manager';
-
 
 // Initialize StaticEnvs 
 StaticEnvs.getInstance();
@@ -20,16 +20,15 @@ app.get('/health', (_req, res) => {
 });
 
 AuthRoute(app);
+PostRoute(app);
 
 const port = StaticEnvs.getInstance().getEnvs().PORT;
 if (require.main === module) {
   (async () => {
     try {
-
       RegionalDbManager.getInstance();
       // await RegionalDbManager.checkConnection("US_EAST");
       // await RegionalDbManager.checkConnections();
-
       // await enablePgcryptoExtension();
       // await syncDatabase();
       app.listen(port, () => {

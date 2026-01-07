@@ -31,8 +31,5 @@ export const SetUpDbConnections = async (
     const currentConnection = RegionalDbManager.getCurrentConnection();
     UserModelPostgres.setConnection(currentConnection.connection!);
 
-    const a = await UserModelPostgres.findAll()
-    console.log(`Users found in ${region} DB: `, a.length);
-
     next();
 };

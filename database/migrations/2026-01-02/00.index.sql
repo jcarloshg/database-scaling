@@ -29,3 +29,22 @@ CONSTRAINT content_not_empty CHECK (trim(content) <> '') );
 CREATE INDEX idx_posts_user_id ON posts (user_id);
 -- Index by timestamp to show latest posts first (Speed Use Case)
 CREATE INDEX idx_posts_created_at ON posts (created_at DESC);
+
+-- // ─────────────────────────────────────
+-- another schema for the posts
+-- // ─────────────────────────────────────
+
+CREATE TABLE posts_with_user (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid (),
+    content TEXT NOT NULL, -- The "simple text" requirement
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT content_not_empty CHECK (trim(content) <> ''),
+    user_uuid UUID NOT NULL,
+    user_name VARCHAR(50) NOT NULL
+);
+
+-- Indexing for performance
+-- High-concurrency systems need an index on the foreign key to speed up feed retrieval
+CREATE INDEX idx_posts_with_user_user_uuid ON posts_with_user (user_uuid);
+-- Index by timestamp to show latest posts first (Speed Use Case)
+CREATE INDEX idx_posts_with_user_created_at ON posts_with_user (created_at DESC);
